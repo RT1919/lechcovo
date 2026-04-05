@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Connexion - Lechelle Covoit{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-box">
+        <h2 style="margin-top:0; text-align:center;">Bon retour !</h2>
+        <p style="color:var(--gray); font-size:0.9em; text-align:center; margin-bottom:20px;">
+            Connectez-vous pour voir les détails des trajets.
+        </p>
+        <form method="POST">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Se connecter</button>
+        </form>
+        <p style="text-align:center; font-size:0.85em; margin-top:20px;">
+            Pas encore de compte ? <a href="/signup" style="color:var(--accent); font-weight:600;">S'inscrire ici</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

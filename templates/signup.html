@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}S'inscrire - Lechelle Covoit{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-box">
+        <h2 style="margin-top:0; text-align:center;">Créer un profil</h2>
+        <p style="color:var(--gray); font-size:0.9em; text-align:center; margin-bottom:20px;">
+            Rejoignez la communauté de Lechelle.
+        </p>
+        <form method="POST">
+            <input name="name" placeholder="Nom complet" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <input type="password" name="admin_token" placeholder="Token Admin (Optionnel)">
+            
+            <div style="display:flex; gap:10px; align-items:flex-start; margin: 15px 0;">
+                <input type="checkbox" required style="width:auto; margin-top:4px;">
+                <label style="font-size:0.8em; color:var(--gray);">
+                    J'accepte que mes données soient utilisées pour le service de covoiturage (RGPD).
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;">S'inscrire</button>
+        </form>
+        <p style="text-align:center; font-size:0.85em; margin-top:20px;">
+            Déjà inscrit ? <a href="/login" style="color:var(--accent); font-weight:600;">Se connecter</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
