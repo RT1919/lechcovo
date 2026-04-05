@@ -7,81 +7,67 @@
 
 <div class="container">
     <div style="display: flex; gap: 15px; margin: -40px 0 30px 0; overflow-x: auto; padding-bottom: 10px;">
-        <div style="flex:1; min-width: 140px; background: #1d1d1f; color: white; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="flex:1; min-width: 140px; background: #1d1d1f; color: white; padding: 20px; border-radius: 20px; text-align: center;">
             <div style="font-size: 1.5rem;">🌍</div>
-            <div style="font-weight: 800; font-size: 1.2rem; color: #2ecc71;">{{ stats.co2|round(1) }}kg</div>
-            <div style="font-size: 0.7rem; opacity: 0.8;">CO2 ÉCONOMISÉ (TOTAL)</div>
+            <div style="font-weight: 800; font-size: 1.1rem; color: #2ecc71;">{{ stats.co2|round(1) }}kg CO2</div>
+            <small style="opacity:0.7; font-size: 0.6rem;">COMMUNAUTÉ</small>
         </div>
-        <div style="flex:1; min-width: 140px; background: #1d1d1f; color: white; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="flex:1; min-width: 140px; background: #1d1d1f; color: white; padding: 20px; border-radius: 20px; text-align: center;">
             <div style="font-size: 1.5rem;">🤝</div>
-            <div style="font-weight: 800; font-size: 1.2rem; color: var(--accent);">{{ stats.connections }}</div>
-            <div style="font-size: 0.7rem; opacity: 0.8;">TRAJETS PARTAGÉS</div>
+            <div style="font-weight: 800; font-size: 1.1rem; color: var(--accent);">{{ stats.connections }} Trajets</div>
+            <small style="opacity:0.7; font-size: 0.6rem;">PARTAGÉS</small>
         </div>
     </div>
 
-    {% if not current_user.is_authenticated %}
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
-        <div style="background: white; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-            <div style="font-size:2rem; margin-bottom:10px;">📱</div>
-            <h3>S'inscrire</h3>
-            <p style="color:var(--gray);">Créez votre profil pour commencer.</p>
-            <a href="/signup" class="btn btn-primary">Rejoindre</a>
-        </div>
-    </div>
-    {% else %}
+    {% if current_user.is_authenticated %}
     <div style="background: white; padding: 20px; border-radius: 18px; margin: 30px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <h3>Proposer un trajet</h3>
         <form action="/publish" method="post" style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <input name="departure" placeholder="Départ" required style="flex:1;">
-            <input name="destination" placeholder="Destination" required style="flex:1;">
-            <input name="contact" placeholder="Tél / WhatsApp" required style="flex:1;">
-            <input type="date" name="date" required style="flex:1;">
-            <input type="time" name="time" required style="flex:1;">
-            <input type="number" name="seats" placeholder="Places" min="1" required style="flex:1;">
+            <input name="departure" placeholder="Départ" required style="flex:1; min-width:150px;">
+            <input name="destination" placeholder="Destination" required style="flex:1; min-width:150px;">
+            <input name="contact" placeholder="Tél" required style="flex:1; min-width:100px;">
+            <input type="date" name="date" required style="width:130px;">
+            <input type="time" name="time" required style="width:100px;">
+            <input type="number" name="seats" placeholder="Pl." min="1" required style="width:60px;">
             <button type="submit" class="btn btn-primary">Publier</button>
         </form>
     </div>
     {% endif %}
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 40px;">
-        {% for r in rides %}
-        <div style="background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
-            <div id="map_{{ r.id }}" style="height:150px;" data-dep="{{ r.departure }}" data-dest="{{ r.destination }}"></div>
-            <div style="padding:15px;">
-                <strong>{{ r.departure }} ➔ {{ r.destination }}</strong><br>
-                <small style="color:var(--gray);">Le {{ r.date|date_french }} à {{ r.time }} | Par: {{ r.driver_name }}</small>
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #f5f5f7; padding-top: 12px;">
-                    <div style="font-weight: 600;">💺 {{ r.seats }} places</div>
-                    {% if current_user.is_authenticated and current_user.id != r.user_id %}
-                        <a href="/reserve/{{ r.id }}" class="btn btn-primary" style="padding: 8px 15px; border-radius: 8px;">Réserver</a>
-                    {% elif not current_user.is_authenticated %}
-                        <a href="/login" style="color: var(--accent); font-size: 0.9em;">Connectez-vous</a>
-                    {% endif %}
+    <div style="margin-top: 40px;">
+        {% if rides %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                {% for r in rides %}
+                <div style="background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                    <div id="map_{{ r.id }}" style="height:140px;" data-dep="{{ r.departure }}" data-dest="{{ r.destination }}"></div>
+                    <div style="padding:15px;">
+                        <strong>{{ r.departure }} ➔ {{ r.destination }}</strong><br>
+                        <small style="color:var(--gray);">Le {{ r.date|date_french }} à {{ r.time }} | Par: {{ r.driver_name }}</small>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #f5f5f7; padding-top: 12px;">
+                            <div style="font-weight: 600;">💺 {{ r.seats }} places</div>
+                            {% if current_user.is_authenticated %}
+                                {% if current_user.id == r.user_id %}
+                                    <a href="/delete/{{ r.id }}" class="btn" style="background:var(--red); color:white; padding: 8px 12px;" onclick="return confirm('Supprimer ?')">Supprimer</a>
+                                {% else %}
+                                    <a href="/reserve/{{ r.id }}" class="btn btn-primary" style="padding: 8px 12px;">Réserver</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="/login" style="color:var(--accent); font-size:0.9em;">Se connecter</a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 30px; border: 2px dashed #eee;">
+                <div style="font-size: 4rem; display: inline-block; animation: drive 3s infinite ease-in-out;">🚗</div>
+                <h3 style="margin-top:20px;">Pas de trajets pour le moment</h3>
+                <p style="color:var(--gray);">Soyez le premier à proposer une place !</p>
+            </div>
+            <style> @keyframes drive { 0%,100% {transform:translateX(-20px);} 50% {transform:translateX(20px) translateY(-5px);} } </style>
+        {% endif %}
     </div>
 </div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    async function geocode(city) {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}&limit=1`);
-        const data = await res.json();
-        return data.length > 0 ? [parseFloat(data[0].lat), parseFloat(data[0].lon)] : null;
-    }
-    async function init() {
-        for (let el of document.querySelectorAll('[id^="map_"]')) {
-            const dep = await geocode(el.dataset.dep), dest = await geocode(el.dataset.dest);
-            if (dep && dest) {
-                const map = L.map(el.id, {zoomControl: false, attributionControl: false}).setView(dep, 10);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                L.polyline([dep, dest], {color: '#007aff', weight: 4}).addTo(map);
-            }
-        }
-    }
-    window.onload = init;
-</script>
 {% endblock %}
